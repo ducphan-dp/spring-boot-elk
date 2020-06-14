@@ -46,6 +46,8 @@ services:
     ports:
       - "5000:5000/tcp"
       - "5000:5000/udp"
+      - "5044:5044/udp"
+      - "5044:5044/tcp"
       - "9600:9600"
     environment:
       LS_JAVA_OPTS: "-Xmx256m -Xms256m"
@@ -71,6 +73,14 @@ services:
       - elk
     depends_on:
       - elasticsearch
+  filebeat:
+    container_name: filebeat
+    image: docker.elastic.co/beats/filebeat:7.4.2
+    volumes:
+      - ./beats/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml
+      - ../logs:/usr/share/filebeat/logs
+    networks:
+      - elk
 
 networks:
   elk:
